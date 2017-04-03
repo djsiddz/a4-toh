@@ -72,7 +72,7 @@ export class AppComponent implements OnInit {
   // Creating a method to call and get the data
   getHeroes(): void {
     // Pass the callback function as an argument to the Promise's then() method:
-    this.heroService.getHeroes().then(heroes => this.heroes = heroes);
+    this.heroService.getHeroesSlowly().then(heroes => this.heroes = heroes);
   }
 
   // Adding OnInit and overriding method to call getHeroes()
