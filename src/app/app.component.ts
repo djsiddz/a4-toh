@@ -1,32 +1,17 @@
+// Importing default
 import { Component } from '@angular/core';
-
+import { OnInit } from '@angular/core';
+// Importing additional required classes
 import { Hero } from './hero';
+// Importing HeroService
+import { HeroService }  from './hero.service'
 
-const HEROES: Hero[] = [
-  { id: 11, name: 'Mr. Nice' },
-  { id: 12, name: 'Narco' },
-  { id: 13, name: 'Bombasto' },
-  { id: 14, name: 'Celeritas' },
-  { id: 15, name: 'Magneta' },
-  { id: 16, name: 'RubberMan' },
-  { id: 17, name: 'Dynama' },
-  { id: 18, name: 'Dr IQ' },
-  { id: 19, name: 'Magma' },
-  { id: 20, name: 'Tornado' }
-];
-
+// Writing the @Component declaration that contains information about how this
+// component can be imported, it properties and any other dependencies
 @Component({
   selector: 'my-app',
-	template: `
-    <h1>{{title}}</h1>
-    <h2>My Heroes</h2>
-    <ul class="heroes">
-      <li *ngFor="let hero of heroes" (click)="onSelect(hero)" [class.selected]="hero === selectedHero">
-        <span class="badge">{{hero.id}}</span> {{hero.name}}
-      </li>
-    </ul>
-    <hero-detail [hero]="selectedHero"></hero-detail>
-  `,
+	templateUrl: './app.component.html',
+  providers: [HeroService],
   styles: [`
     .selected {
       background-color: #CFD8DC !important;
@@ -77,9 +62,26 @@ const HEROES: Hero[] = [
     }
   `]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
+  // Injecting the HeroService using a constructor. The constructor itself does
+  // nothing, the parameter defines a private heroService property and
+  // identifies it as an HeroService injection site
+  constructor(private heroService: HeroService) { }
+
+  // Creating a method to call and get the data
+  getHeroes(): void {
+    // Pass the callback function as an argument to the Promise's then() method:
+    this.heroService.getHeroes().then(heroes => this.heroes = heroes);
+  }
+
+  // Adding OnInit and overriding method to call getHeroes()
+  ngOnInit(): void {
+    this.getHeroes();
+  }
+
   title = "Tour of Heroes";
-  heroes = HEROES;
+  heroes: Hero[];
   selectedHero: Hero;
 
   onSelect(hero: Hero): void {
